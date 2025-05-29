@@ -4,13 +4,12 @@
 -- SubQuery : 하나의 SQL 질의문 속에 다른 SQL 질의문이 포함되어 있는 형태
 
 -- 'Den' 보다 월급을 많은 사람의 이름과 월급은?
--- 'Den'의 월급  --> 11000
-select  first_name,
-		salary
+-- 1)'Den'의 월급 11000
+select salary
 from employees
 where first_name = 'Den';
 
--- 11000보다 많은 사람 리스트
+-- 2) 11000보다 많은 사람 리스트
 select  first_name,
 		salary
 from employees
@@ -25,17 +24,18 @@ where salary >= (select salary
 				 from employees 
                  where first_name='Den'); -- 가급적 order by 를 하지 않는다.
 
-
--- 1)월급을 가장 적게 받는 사람의 이름, 월급, 사원번호는?              
+-- 월급을 가장 적게 받는 사람의 이름, 월급, 사원번호는?
+-- 가장적은 월급 min(), 그룹함수라서 이름..하고 같이 사용할수 없다
+-- 1)가장 적은 월급 --> 2100          
 select  min(salary) 
 from employees;      
 
--- 2)월급을 가장 적게 받는 사람의 이름, 월급, 사원번호
+-- 2)월급을 2100인 사람의 이름, 월급, 사원번호
 select  first_name,
 		salary,
         employee_id
 from employees                                                                                                                                                                                                                                                                                                              
-where salary = 2200;
+where salary = 2100;
 
 -- 3) 합치기     
 select  first_name,
@@ -45,7 +45,7 @@ from employees
 where salary = (select min(salary)
 				from employees);
 				
--- 절대로 한방에 작성하지 않는다. 오해 하지 말자 !!!!!                
+-- !!! 절대로 한방에 작성하지 않는다. 오해 !!!!!  하지 말자                
 
 -- 평균 월급보다 적게 받는 사람의 이름, 월급을 출력하세요?
 -- 1) 평균월급 --> 6461.831776
@@ -53,8 +53,7 @@ select  avg(salary)
 from employees;     
 
 -- 2) 6461.831776 보다 월급이 적은 사람을 구한다
-select  first_name,
-		salary
+select *
 from employees
 where salary <= 6461.831776;
 
@@ -63,7 +62,8 @@ select  first_name,
 		salary
 from employees
 where salary <= (select  avg(salary)
-				from employees);
+				from employees)
+                order by salary desc;
                 
 -- 부서번호가 110인 직원의 월급과 같은 월급을 받는 
 -- 모든 직원의 사번, 이름, 월급을 출력하세요
@@ -112,7 +112,8 @@ group by department_id;
 */
 
 -- 2) 각 부서별로 최고급여 받는 사원의 이름 출력
--- 2-1) where 절
+-- 2-1) where 절로 표현
+/*
 select  first_name,
 		department_id,
 		salary
@@ -120,6 +121,7 @@ from employees
 where salary = 4400
 or salary = 13000
 or salary = 11000;
+*/
 
 select  first_name,
 		department_id,
@@ -131,16 +133,14 @@ or (salary = 11000 and department_id = 30)
 ;
 
 -- 2-2 in()    --> 비교값이 2개 이상
+
 select  first_name,
 		department_id,
 		salary
 from employees
-where (department_id, salary) in (select department_id, max(salary); 
-								  
+where (department_id, salary) in ((10, 4400), (20,13000), (30,11000)); 
 
-
-
--- 3) 합치기  2-2ㅅ
+-- 3) 합치기  2-2사용
 select  first_name,
 		department_id,
 		salary
@@ -150,36 +150,43 @@ where (department_id, salary) in (select department_id,
 								  from employees
                                   group by department_id);
                                   
-                                  
 -- 부서번호가 110인 직원의 월급 중
 -- 가장 작은 월급(8300.00) 보다 월급이 많은 모든 직원의
 -- 이름, 급여를 출력하세요.(or연산--> 8300보다 큰)              
 
--- 1) 부서번호가 110인 직원의 월급 (8300 / 12008)
-select salary
+-- 1) 부서번호가 110인 직원의 월급 (8300, 12008)
+select  first_name,
+		salary
 from employees
 where department_id =110;
 
 
 -- 2) 8300보다 많은 직원(8300보다 많은 또는 12008 보다 많은 직원)
+-- 2-1) where절
 select *
 from employees
 where salary >= 8300
 or salary >= 12008;
-                
+         
+-- 2-2) any()    where절이 or일때         
 select *
 from employees
 where salary >= any (8300,12008);
 
 -- 3) 합치기
 -- or ---> any
-
+select 	first_name,
+		salary
+from employees
+where salary >=any (select salary 
+					from employees
+					where department_id = 110 );
 
 -- 부서번호가 110인 직원의 월급 중
 -- 가장 작은 월급(8300.00) 보다 월급이 많은 모든 직원의
--- 이름, 급여를 출력하세요.(and연산--> 8300보다 큰)          
+-- 이름, 급여를 출력하세요.(and연산--> 12008보다 큰)          
 
--- 1) 
+-- 1) 부서번호 110인 직원의 월급 구하기
 select  first_name,
 		salary
 from employees
@@ -194,11 +201,11 @@ where salary > 8300
 and salary > 12008;
                  
 -- 2-2) all ()로 표현   -- 의미만
-select  first_name,
+select 	first_name,
 		salary
 from employees
-where salary >all (8300,12008)
-;
+where salary >all (8300, 12008);
+
 
 -- 합치기 2-2 사용
 select  first_name,
@@ -207,3 +214,113 @@ from employees
 where salary >all (select salary
 				   from employees
 				   where department_id=110);
+      
+-- ------------------------------------------------
+# SubQuery   where절 vs 테이블
+-- ------------------------------------------------      
+-- #where절로 해결
+-- 각 부서별로 최고월급을 받는 사원의 부서번호, 직원번호, 이름, 월급을 출력하세요
+-- 1) 각 부서별 최고 월급   (리스트)
+select 	department_id,
+		max(salary) 
+from employees
+group by department_id
+order by department_id asc;   --  확인용      
+      
+-- 2-1) where절  
+select *
+from employees
+where department_id =10 and salary = 4400
+or department_id =20 and salary = 13000
+or department_id =30 and salary = 11000;      
+      
+-- 2-2)   in (),  >any (),  >all () 
+select *
+from employees
+where (department_id, salary) in ( (10,4400) , (20,13000) , (30,11000));
+
+-- 3) 2-2)로 합친다
+-- 부서번호, 직원번호, 이름, 월급
+select 	department_id,
+		employee_id,
+        first_name,
+        salary
+from employees      
+where (department_id, salary) in (select department_id,
+										 max(salary) 
+								  from employees
+								  group by department_id);
+
+/*
+select *
+from 테이블명
+where 컬럼명 in (서브커리 결과)
+*/      
+      
+-- ----------------------------------------------------      
+-- #from절의 테이블로 해결
+/*
+-- 테이블2를 조인한다
+select *
+from 테이블명, 테이블2(서브퀄결과)
+where 컬럼명 = 컬럼명
+*/
+
+-- 각 부서별로 최고월급을 받는 사원의 부서번호, 직원번호, 이름, 월급을 출력하세요
+-- 1) 각 부서별 최고월급
+select  department_id,
+		max(salary)
+from employees
+group by department_id;
+
+select *
+from locations;
+/*결과 일부
+(10, 4400)
+(20, 13000)
+(30, 11000)
+*/      
+
+-- 2) 전체구조
+select *
+from employees e,  가상의테이블 s
+where e.department_id = s.department_id
+and e.salary = s.salary;
+
+select *
+from employees e 
+where e.department_id = 20
+and e.salary = 6000;
+
+-- 각 부서별로 최고급여를 받는 사원을 출력하세요
+select  department_id,
+		max(salary)
+from employees
+group by department_id;                   
+
+select 	employee_id,
+		department_id,
+		first_name,
+		salary
+from employees e
+where (e.department_id = 10 and salary = 4400)
+or (e.department_id = 20 and salary = 13000)
+or (e.department_id = 30 and salary = 11000);
+
+select *
+from employees e, salary s;
+
+select  employee_id,
+		department_id,
+        first_name,
+		salary
+from employees e
+where (department_id, salary) in (select  department_id,
+										  max(salary)
+								  from employees
+								  group by department_id); 
+
+-- --------------------------------------------------------------------
+select *
+from employees;
+
