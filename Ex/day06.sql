@@ -175,5 +175,35 @@ where salary >= any (8300,12008);
 -- or ---> any
 
 
+-- 부서번호가 110인 직원의 월급 중
+-- 가장 작은 월급(8300.00) 보다 월급이 많은 모든 직원의
+-- 이름, 급여를 출력하세요.(and연산--> 8300보다 큰)          
 
-                                  
+-- 1) 
+select  first_name,
+		salary
+from employees
+where department_id=110;
+
+-- 2) 부서번호가 110인 직원의 월급 중 가장 작은 월급보다 월급이 높은 직원 구하기
+-- 2-1) where 절로 표현 
+select  first_name,
+		salary
+from employees
+where salary > 8300
+and salary > 12008;
+                 
+-- 2-2) all ()로 표현   -- 의미만
+select  first_name,
+		salary
+from employees
+where salary >all (8300,12008)
+;
+
+-- 합치기 2-2 사용
+select  first_name,
+		salary
+from employees
+where salary >all (select salary
+				   from employees
+				   where department_id=110);
