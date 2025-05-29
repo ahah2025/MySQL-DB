@@ -164,8 +164,9 @@ from departments d left outer join  employees e
 union
 (오른쪽 기준)
 */
-
-(select e.employee_id,
+-- --------------------------------------------------------------------
+(
+select e.employee_id,
         e.first_name,
 		d.department_id,
         d.department_name
@@ -185,7 +186,7 @@ right outer join departments d
 	on e.department_id = d.department_id
 )
 ;
-
+-- --------------------------------------------------------------------
 -- 왼쪽기준
 select 	e.employee_id,
 		e.first_name,
