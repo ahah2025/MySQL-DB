@@ -282,45 +282,23 @@ from locations;
 */      
 
 -- 2) 전체구조
-select *
+select employee_id,
+	   department_id,
+	   first_name,
+	   salary
 from employees e,  가상의테이블 s
 where e.department_id = s.department_id
 and e.salary = s.salary;
 
-select *
-from employees e 
-where e.department_id = 20
-and e.salary = 6000;
-
--- 각 부서별로 최고급여를 받는 사원을 출력하세요
-select  department_id,
-		max(salary)
-from employees
-group by department_id;                   
-
-select 	employee_id,
-		department_id,
-		first_name,
-		salary
-from employees e
-where (e.department_id = 10 and salary = 4400)
-or (e.department_id = 20 and salary = 13000)
-or (e.department_id = 30 and salary = 11000);
-
-select *
-from employees e, salary s;
-
-select  employee_id,
-		department_id,
-        first_name,
-		salary
-from employees e
-where (department_id, salary) in (select  department_id,
-										  max(salary)
-								  from employees
-								  group by department_id); 
-
--- --------------------------------------------------------------------
-select *
-from employees;
+select  e.department_id,
+		e.employee_id,
+        e.first_name,
+		e.salary,
+		s.maxSalary
+from employees e, (select  department_id,
+						   max(salary) maxSalary
+				   from employees
+				   group by department_id) s 
+where e.department_id = s.department_id
+and e.salary = s.maxSalary; 
 
