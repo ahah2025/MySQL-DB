@@ -165,26 +165,29 @@ union
 (오른쪽 기준)
 */
 -- --------------------------------------------------------------------
+select count(*)
+from 
 (
-select e.employee_id,
-        e.first_name,
-		d.department_id,
-        d.department_name
-from employees e    
-left outer join departments d	
-	on e.department_id = d.department_id
-)
-union
--- (오른쪽 기준)
-(
-select e.employee_id,
-		e.first_name,
-		d.department_id,
-        d.department_name
-from employees e    
-right outer join departments d	
-	on e.department_id = d.department_id
-)
+	( -- 왼쪽 join
+	select  e.employee_id,
+			e.first_name,
+			d.department_id,
+			d.department_name
+	from employees e    
+	left outer join departments d	
+		on e.department_id = d.department_id
+	)
+	union
+	( -- 오른쪽 join
+	select  e.employee_id,
+			e.first_name,
+			d.department_id,
+			d.department_name
+	from employees e    
+	right outer join departments d	
+		on e.department_id = d.department_id
+	)
+) t
 ;
 -- --------------------------------------------------------------------
 -- 왼쪽기준
@@ -233,7 +236,7 @@ where e.salary = l.location_id;
 
 -- ------------------------------------------------------------------------------------------
 # 조인 연습(equi join, inner join 두가지로 풀어볼것)
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명
+-- 1-1. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명
 -- where
 select 	e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -248,7 +251,7 @@ from employees e,
 where e.department_id = d.department_id
 	and d.location_id = l.location_id;
     
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명
+-- 1-2. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명
 -- INNER JOIN  
 select  e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -263,7 +266,7 @@ inner join departments d
 inner join locations l
 		on d.location_id = l.location_id;
    
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명
+-- 2-1. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명
 -- where
 select  e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -282,7 +285,7 @@ where e.department_id = d.department_id
 	and d.location_id = l.location_id
     and l.country_id = c.country_id;
     
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명    
+-- 2-2. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명    
 -- INNER JOIN   
 select  e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -301,7 +304,7 @@ inner join locations l
 inner join countries c
 		on l.country_id = c.country_id;  
         
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명, 지역아이디, 지역명
+-- 3-1. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명, 지역아이디, 지역명
 -- where
 select  e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -324,7 +327,7 @@ where e.employee_id = d.manager_id
     and l.country_id = c.country_id
     and c.region_id = r.region_id ;
 
--- 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명, 지역아이디, 지역명
+-- 3-2. 직원아이디, 이름, 월급, 부서아이디, 부서명, 도시아이디, 도시명, 나라아이디, 나라명, 지역아이디, 지역명
 -- INNER JOIN
 select  e.employee_id as 직원아이디,
 		e.first_name as 이름,
@@ -346,4 +349,3 @@ inner join countries c
 		on l.country_id = c.country_id        
 inner join regions r 
 		on c.region_id = r.region_id;
-        --
