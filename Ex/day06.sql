@@ -112,6 +112,7 @@ group by department_id;
 */
 
 -- 2) 각 부서별로 최고급여 받는 사원의 이름 출력
+-- 2-1) where 절
 select  first_name,
 		department_id,
 		salary
@@ -120,9 +121,59 @@ where salary = 4400
 or salary = 13000
 or salary = 11000;
 
--- 합치기
 select  first_name,
+		department_id,
 		salary
 from employees
-where salary = (select max(salary) 
-				from employees);
+where (salary = 4400 and department_id = 10)
+or (salary = 13000 and department_id = 20)
+or (salary = 11000 and department_id = 30)
+;
+
+-- 2-2 in()    --> 비교값이 2개 이상
+select  first_name,
+		department_id,
+		salary
+from employees
+where (department_id, salary) in (select department_id, max(salary); 
+								  
+
+
+
+-- 3) 합치기  2-2ㅅ
+select  first_name,
+		department_id,
+		salary
+from employees						-- 1)식
+where (department_id, salary) in (select department_id, 
+										 max(salary) 
+								  from employees
+                                  group by department_id);
+                                  
+                                  
+-- 부서번호가 110인 직원의 월급 중
+-- 가장 작은 월급(8300.00) 보다 월급이 많은 모든 직원의
+-- 이름, 급여를 출력하세요.(or연산--> 8300보다 큰)              
+
+-- 1) 부서번호가 110인 직원의 월급 (8300 / 12008)
+select salary
+from employees
+where department_id =110;
+
+
+-- 2) 8300보다 많은 직원(8300보다 많은 또는 12008 보다 많은 직원)
+select *
+from employees
+where salary >= 8300
+or salary >= 12008;
+                
+select *
+from employees
+where salary >= any (8300,12008);
+
+-- 3) 합치기
+-- or ---> any
+
+
+
+                                  
