@@ -68,22 +68,61 @@ where salary <= (select  avg(salary)
 -- 부서번호가 110인 직원의 월급과 같은 월급을 받는 
 -- 모든 직원의 사번, 이름, 월급을 출력하세요
 -- 1)부서번호가 110인 직원의 월급  12008.00, 8300.00
-select  department_id,
-		salary
+select salary
 from employees
 where department_id = 110;
 
--- 2) 12008.00, 8300.00 같은 월급을 받는 모든 직원 --> Nancy,Shelley,William
+-- 2-1) 12008.00, 8300.00 같은 월급을 받는 모든 직원 --> Nancy,Shelley,William
+-- where 절로 구하기, or 조건절이 여러개
 select  employee_id,
 		first_name,
         salary
 from employees       
-where salary in(12008,8300);
+where salary = 12008
+or salary = 8300;
 
--- 3) 합치기
+-- 2-2) 12008.00, 8300.00 같은 월급을 받는 모든 직원 --> Nancy,Shelley,William
+-- in () 구하기
 select  employee_id,
 		first_name,
         salary
 from employees       
-where salary in(12008.00,8300.00) = (select  department_id = 110
-									 from employees);
+where salary in(12008.00,8300.00);
+
+-- 3) 합치기 --> 12008.00 / 12008.00 / 8300.00 (3row)
+-- 다중행 SubQuery
+-- subQuery의 결과가 여러 Row인 경우
+select salary
+from employees       
+where salary in(select salary
+				from employees
+                where department_id = 110);
+                
+-- 각 부서별로 최고급여를 받는 사원의 이름과 월급을 출력하세요    
+-- 1)부서별 최고급여 --> 이름(first_name)출력 안됨
+select  department_id, 
+		max(salary) 
+from employees
+group by department_id;
+
+/*
+10	4400.00   Jennifer
+20	13000.00  Michael
+30	11000.00  Den, Gerald, Ellen
+*/
+
+-- 2) 각 부서별로 최고급여 받는 사원의 이름 출력
+select  first_name,
+		department_id,
+		salary
+from employees
+where salary = 4400
+or salary = 13000
+or salary = 11000;
+
+-- 합치기
+select  first_name,
+		salary
+from employees
+where salary = (select max(salary) 
+				from employees);
