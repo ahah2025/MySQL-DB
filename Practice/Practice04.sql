@@ -24,49 +24,81 @@ from employees
 where salary in(6461.831776,24000.00)
 order by salary asc;
 
-
 select *
 from employees
 where salary = (select max(salary)
 				from employees)
                 order by salary asc;
 
-
 /*
 문제3. 
-직원중 Steven(first_name) king(last_name)이 소속된 부서(departments)가 있는 곳의 주소
-를 알아보려고 한다. 
-도시아이디(location_id), 거리명(street_address), 우편번호(postal_code), 도시명(city), 주
-(state_province), 나라아이디(country_id) 를 출력하세요
+직원중 Steven(first_name) king(last_name)이 소속된 부서(departments)가 
+있는 곳의 주소를 알아보려고 한다. 
+도시아이디(location_id), 거리명(street_address), 우편번호(postal_code), 
+도시명(city), 주(state_province), 나라아이디(country_id) 를 출력하세요
 */
-select  first_name,
-		last_name
-from employees e
-where department_id = 90
-or last_name = King ;
-
-
-select  e.first_name,
-		e.last_name,
-        l.location_id,
-        l.street_address,
-        l.postal_code,
-        l.city,
-        l.state_province,
-        c.country_id
-from employees e, locations l, departments d, countries c;
-
-
+select count(*)
+from
+(
+	( -- 왼쪽 join
+	select  e.first_name,
+			e.last_name,
+			e.department_id,
+			l.location_id,
+			l.street_address,
+			l.postal_code,
+			l.city,
+			l.state_province,
+			l.country_id
+	from employees e, locations l 
+	left outer join departments d
+				 on e.department_id = d.department_id
+	)             
+	union
+	( -- 오른쪽 join
+	select  e.first_name,
+			e.last_name,
+			e.department_id,
+			l.location_id,
+			l.street_address,
+			l.postal_code,
+			l.city,
+			l.state_province,
+			l.country_id 
+	from employees e, locations l 
+	right outer join departments d
+				 on e.department_id = d.department_id
+	)
+) t 
+;
 /*
 문제4. 
 job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,월급을 월급의 내림차순으로 
-출력하세요  -ANY연산자 사용 
+출력하세요  -ANY연산자 사용 (or)
 (74건)
 */
+select  min_salary,
+		max_salary
+from jobs
+where min_salary >= any (5500,8500);
 
+--  where 절
+select *
+from jobs
+where min_salary <= 5500
+or max_salary <= 8500;
 
-
-
+-- 합치기
+-- or ---> any
+select 	e.employee_id,
+		e.first_name,
+		e.salary,
+        j.job_id
+from employees e ,jobs j
+where salary >=any (select salary 
+					from employees, jobs 
+					where salary = 5500 
+                    order by salary desc);
 
 /*
 문제5.  
