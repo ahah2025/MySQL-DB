@@ -15,40 +15,22 @@ where salary < 6461.831776;
 직원번호(employee_id), 이름(first_name), 월급(salary), 평균월급, 최대월급을 월급의 오름차
 순으로 정렬하여 출력하세요  
 (51건) 
-*/
--- -------------------------------------------
-select  first_name,
-		salary
-from employees
-where salary >= (select salary
-				 from employees 
-                 where first_name='Den'); 
--- -----------------------------------------                 
+*/       
+-- 평균월급: 6461.831776
+-- 최대월급: 24000.00
 select  employee_id,
-		first_name,
-        salary,
-		avg(salary) as avgSalary, -- 6461.831776
-        max(salary) as maxSalary  -- 24000.00
+        salary
 from employees
-where salary >= (select salary
-				 from employees 
-                 where salary > 6461.831776
-                 and salary < 24000 )= (select salary,
-											   avg(salary),
-											   max(salary)
-									   from employees
-                                       where salary > 6461.831776
-									   and salary < 24000); 
-
-select  employee_id,
-        first_name,
-        salary,
-        avg(salary),
-        max(salary)
-from employees
-where avg(salary) > 6461.831776
-and max(salary) < 24000
+where salary in(6461.831776,24000.00)
 order by salary asc;
+
+
+select *
+from employees
+where salary = (select max(salary)
+				from employees)
+                order by salary asc;
+
 
 /*
 문제3. 
@@ -57,8 +39,22 @@ order by salary asc;
 도시아이디(location_id), 거리명(street_address), 우편번호(postal_code), 도시명(city), 주
 (state_province), 나라아이디(country_id) 를 출력하세요
 */
+select  first_name,
+		last_name
+from employees e
+where department_id = 90
+or last_name = King ;
 
 
+select  e.first_name,
+		e.last_name,
+        l.location_id,
+        l.street_address,
+        l.postal_code,
+        l.city,
+        l.state_province,
+        c.country_id
+from employees e, locations l, departments d, countries c;
 
 
 /*

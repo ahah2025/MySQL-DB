@@ -430,17 +430,7 @@ order by hire_date asc;
 -- 1)부서번호가 100인 직원
 select *
 from employees
-where department_id = 100
-;
-
-/*
-select  first_name,
-		salary,
-        department_id
-from employees
-where department_id = 100
-limit 0,1;
-*/
+where department_id = 100;
 
 -- 2)부서번호100에서 가장 큰 월급
 select 	max(salary)
@@ -463,9 +453,6 @@ where salary = (select 	max(salary)
 				from employees
 				where department_id = 100)   
 and department_id = 100;
-
-
-
 
 -- ---------------------------------------
 -- limit 사용
