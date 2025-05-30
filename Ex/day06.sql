@@ -302,3 +302,90 @@ from employees e, (select  department_id,
 where e.department_id = s.department_id
 and e.salary = s.maxSalary; 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ----------------------------------------------------
+# limit
+-- ----------------------------------------------------
+-- 직원관리 페이지, 
+-- 사번이 작은 직원이 위쪽에 출력(요구사항에 있었음)
+-- -->자동으로 정렬(믿으면 안됨)되더라도 꼭 order by 절로 정렬해줘야 함
+-- *1페이지의 데이터만 가져오기(10)
+/*
+limit (0,10)    --> 100번 부터 10개
+limit (10,10)   --> 11번 부터 10개
+limit (20,10)   --> 121번 부터 10개
+limit (6,5)     --> 106번 부터 5개 
+(6,3)			--> 106번 부터 3개
+*/
+select  employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 6,3; 	  -- 106번부터 5개
+
+select  employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5 offset 5; 	 
+
+
+select  employee_id,
+		first_name,
+        salary
+from employees
+order by employee_id asc
+limit 5 offset 10;     -- 11번 째부터 5개
+
+-- 07년에 입사한 직원중 급여가 많은 직원중 3에서 7등의 이름 급여 입사일은?
+-- William		7400.00		2007-02-23 --> 3등
+-- 1)전체확인
+select *
+from employees;
+
+-- 2) 2007년 입사자만 조회
+-- Luis		6900.00		2007-12-07 --> 7등
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01';
+
+-- 3)월급이 큰 사람부터 내림차순 정렬
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc;
+
+-- 4) 3번째 부터 5명 출력
+select *
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc
+limit 2,5;
+
+-- 5) 출력컬럼 결정
+select 	first_name,
+		hire_date,
+        salary
+from employees
+where hire_date >= '2007-01-01'
+and hire_date < '2008-01-01'
+order by salary desc
+limit 2, 5;
+
