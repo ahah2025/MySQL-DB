@@ -1,4 +1,4 @@
--- 계정만들기
+-- root 계정 만들기
 -- 모든곳에서 접속가능
 create user 'web'@'%' identified by '1234';
 		--   계정이름(web)      
