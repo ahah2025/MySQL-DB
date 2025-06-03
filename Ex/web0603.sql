@@ -21,9 +21,9 @@ create table book(
     pub_date datetime
 );    
 
--- authorI 데이터 입력
+-- author 데이터 입력
 -- 기본
-Insert into authorI(author_id,author_name,author_desc) 
+Insert into author(author_id,author_name,author_desc) 
 values(1,'이문열','서울');
 
 Insert into author
@@ -59,5 +59,31 @@ delete from author; -- 전체삭제의미(막혀있음)
 -- ---------------------------------------------------
 -- 데이터 수정
 
+-- where 절이 없는 경우 모든 데이타가 바뀐다(기본은 막혀있음)
+--
 
+-- where 절을 꼭 써야 한다(pk로 조건절 작성)
+update author set author_name = '기안84' ,
+author_desc = '웹툰작가'
+where author_id = 1;
+
+update author 
+set author_name = '서장훈',
+	author_desc = '농구선수'
+where author_id >= 1;
+
+
+-- 데이터 조회
+select * from author;
+show tables;
+
+/*
+create table book(
+	a,
+    b,
+    c,
+    foreign key문법
+);
+
+*/
 
