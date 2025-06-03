@@ -104,7 +104,7 @@ where b.author_id = a.author_id;
 insert into author
 values(null,null,null,null,null,6,'김영하','알뜰신잡출연');
 
--- 6) 강풀작가의 설명의 데이터 변경(서울특별시 -> 온라인 만화가 1세대)
+-- 6) 강풀작가의 설명의 데이터 변경(서울특별시 -> 온라인 만화가 1세대)  --> 이미지 첨부
 -- 7) 김영하 데이터 삭제 쿼리문
 delete from book
 where author_id = 6;
