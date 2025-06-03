@@ -7,7 +7,7 @@ drop table author;
 drop table book;
 
 -- 작가 테이블 생성
-create table author (
+create table author (								-- pk 자동증가(auto_increment)
 	author_id		int				PRIMARY KEY   auto_increment,
 	author_name		VARCHAR(100)	NOT NULL,
     author_desc 	VARCHAR(500)

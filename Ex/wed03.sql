@@ -80,7 +80,7 @@ where author_id = 2;
 insert into author
 values(null,'정우성','영화배우');
 
--- 삭제 잘됨    작가번호 3번을 책에서 사용하고 있지 않음Add commentMore actions
+-- 삭제 잘됨    작가번호 3번을 책에서 사용하고 있지 않음
 delete from author
 where author_id = 3;
 -- --------------------------------------
