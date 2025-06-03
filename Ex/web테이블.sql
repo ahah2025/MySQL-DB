@@ -96,8 +96,8 @@ values('유재석','런닝맨');						-- author_id 데이터가 꼭 있어야 �
 insert into author(author_desc, author_name, author_id) -- 나열한 커럼명의 순서대로
 values('제주도','이효리',5);								-- 데이터를 나열해야 한다
 
-select * 
-from author;
+-- 조회
+select * from author;
 
 -- 책 테이블 만들기
 create table book(

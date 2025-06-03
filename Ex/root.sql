@@ -4,10 +4,14 @@ create user 'web'@'%' identified by '1234';
 		--   계정이름(web)      
         
 -- localhost 에서만 접속가능
-create user 'web'@'localhost' identified by '1234';        
+-- ********* create user 'web'@'localhost' identified by '2341';        
+
+-- 3번 라인, 7번 라인, 11번 라인 서로 다른 웹 만들기 임
+-- 실행할거면 3번만 실행하고 7번, 11번 라인은 주석으로 막아두기
 
 -- 192.168.0.122 에서만 접속가능
-create user 'web'@'192.168.0.122' identified by '1234'; 
+-- ********* create user 'web'@'192.168.0.122' identified by '3412'; 
+
 
 -- 계정 비번 변경
 -- alter 
@@ -20,9 +24,7 @@ my sql -uweb -p
 
 -- #계정 삭제
 drop user 'web'@'192.168.0.122' ;
-
 drop user 'web'@'localhost';
-
 drop user 'web'@'%';
 
 use mysql;
